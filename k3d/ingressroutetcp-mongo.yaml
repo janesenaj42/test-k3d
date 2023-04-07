@@ -1,0 +1,29 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: mongodb-ingress-tcp
+  namespace: default
+spec:
+  entryPoints:
+    - mongodb
+  routes:
+    - match: HostSNI(`*`)
+      services:
+        - name: mongodb
+          port: 27017
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: traefik
+  namespace: kube-system
+spec:
+    valuesContent: |-
+      additionalArguments:
+      - "--entryPoints.mongodb.address=:27017/tcp"
+      ports:
+        mongodb:
+          port: 27017
+          expose: true
+          exposedPort: 27017
+          protocol: TCP

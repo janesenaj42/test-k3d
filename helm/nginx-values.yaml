@@ -1,0 +1,15 @@
+extraVolumes:
+    - name: pv-nginx
+      persistentVolumeClaim:
+        claimName: pv-nginx
+
+extraVolumeMounts:
+    - name: pv-nginx
+      mountPath: /app/asdf
+
+service:
+  type: ClusterIP
+
+ingress:
+  enabled: true
+  hostname: nginx.172.18.112.1.nip.io
